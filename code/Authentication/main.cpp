@@ -16,7 +16,7 @@ struct Radiotap_header {
 #pragma pack(pop)
 
 #pragma pack(push, 1)
-struct Deauth_Frame {
+struct Authentication_Frame {
     uint16_t  type;
     uint16_t  dur;
     Mac   dst_mac;
@@ -52,10 +52,10 @@ struct Wir_Management {
 
 
 struct Authentication_Packet {
-    Radiotap_header  radiotab;
+    Radiotap_header      radiotab;
     uint8_t nul[3];
-    Deauth_Frame     d_frame;
-    Wir_Management   w_manage;
+    Authentication_Frame auth_frame;
+    Wir_Management       w_manage;
 };
 
 
@@ -89,11 +89,11 @@ int main(int argc , char * argv[]) {
     Authentication_Packet packet;
 
     packet.radiotab.len = 0x000b;
-    packet.d_frame.type = 0x00b0;
-    packet.d_frame.dur = 0x013a;
-    packet.d_frame.dst_mac = Mac(ST_MAC);
-    packet.d_frame.src_mac = Mac(AP_MAC);
-    packet.d_frame.bssid = Mac(ST_MAC);
+    packet.auth_frame.type = 0x00b0;
+    packet.auth_frame.dur = 0x013a;
+    packet.auth_frame.dst_mac = Mac(ST_MAC);
+    packet.auth_frame.src_mac = Mac(AP_MAC);
+    packet.auth_frame.bssid = Mac(ST_MAC);
     packet.w_manage.fixed_pa.auth_SEQ = 0x0020;
     packet.w_manage.tag_pa.tag_num = 0xdd;
     packet.w_manage.tag_pa.tag_len = 9;
