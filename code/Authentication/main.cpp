@@ -6,8 +6,6 @@
 
 using namespace std;
 
-char * ST_MAC;
-
 #pragma pack(push, 1)
 struct Radiotap_header {
     uint8_t   version;     /* set to 0 */
