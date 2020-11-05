@@ -52,8 +52,8 @@ struct Deauth_Packet {
 
 
 void usage() {
-    cout << "syntax : Aeauthentication <interface> <ap mac> [<station mac>]\n";
-    cout << "sample : Aeauthentication wlan0 00:11:22:33:44:55 66:77:88:99:AA:BB\n";
+    cout << "syntax : Authentication <interface> <ap mac> <station mac>\n";
+    cout << "sample : Authentication wlan0 00:11:22:33:44:55 66:77:88:99:AA:BB\n";
 }
 
 int main(int argc , char * argv[]) {
@@ -63,7 +63,7 @@ int main(int argc , char * argv[]) {
         return -1;
     }
 
-    cout << "** Aeautatication Start **\n";
+    cout << "** Authantication Start **\n";
 
     char * Interface = argv[1];
     char * AP_MAC = argv[2];
