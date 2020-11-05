@@ -63,7 +63,7 @@ int main(int argc , char * argv[]) {
         return -1;
     }
 
-    cout << "** Authantication Start **\n";
+    cout << "** Authentication Start **\n";
 
     char * Interface = argv[1];
     char * AP_MAC = argv[2];
